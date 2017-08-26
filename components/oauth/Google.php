@@ -47,12 +47,13 @@ class Google extends \yii\authclient\clients\Google
     {
         $attributes = $this->api('people/me', 'GET');
 
+        $sex = (isset($attributes['gender'])) ? $this->normalizeSex()[$attributes['gender']] : User::SEX_MALE;
         $return_attributes = [
             'User' => [
                 'email' => $attributes['emails'][0]['value'],
                 'username' => $attributes['displayName'],
                 'photo' => str_replace('sz=50', 'sz=200', $attributes['image']['url']),
-                'sex' => $this->normalizeSex()[$attributes['gender']]
+                'sex' => $sex
             ],
             'provider_user_id' => $attributes['id'],
             'provider_id' => UserOauthKey::getAvailableClients()['google'],
