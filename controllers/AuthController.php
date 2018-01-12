@@ -60,7 +60,11 @@ class AuthController extends \yii\web\Controller
 
                     $user->validate();
 
-                    return ($user->save() && $this->createKey($attributes, $user->id) && Yii::$app->user->login($user, 3600 * 24 * 30));
+                    return ($user->save()
+                        && $this->createKey($attributes, $user->id)
+                        && Yii::$app->user->login($user, 3600 * 24 * 30)
+                        && Yii::$app->session->set('registration', true)
+                    );
                 } else {
                     return ($this->createKey($attributes, $user->id) && Yii::$app->user->login($user, 3600 * 24 * 30));
                 }
